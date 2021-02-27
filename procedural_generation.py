@@ -216,8 +216,17 @@ if __name__ == "__main__":
         default=3,
         help='TODO')
 
+    parser.add_argument(
+        '--seed',
+        required=False,
+        type=int,
+        help='TODO')
+
     args = parser.parse_args()
     check_inputs(args)
+
+    if args.seed is not None:
+        random.seed(args.seed)
 
     variations = create_primitive_variations(args)
 
