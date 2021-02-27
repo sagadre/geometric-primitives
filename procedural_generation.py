@@ -30,7 +30,7 @@ def create_primitive_variations(args):
     return variations
 
 
-def create_link(mesh, name, x, y, z, filename, r=0, p=0, yaw=0, mass=0.75):
+def create_link(mesh, name, x, y, z, filename, num_colors, r=0, p=0, yaw=0, mass=0.75):
 
     inertia = mesh.moment_inertia
     xx = inertia[0, 0]
@@ -39,6 +39,8 @@ def create_link(mesh, name, x, y, z, filename, r=0, p=0, yaw=0, mass=0.75):
     yy = inertia[1, 1]
     yz = inertia[1, 2]
     zz = inertia[2, 2]
+
+    color_ref = random.randint(1, num_colors)
 
     template = f"""
     <link name="{name}">
@@ -52,6 +54,7 @@ def create_link(mesh, name, x, y, z, filename, r=0, p=0, yaw=0, mass=0.75):
         <geometry>
         <mesh filename="{filename}" scale="1 1 1"/>
         </geometry>
+        <material name="mat_{color_ref}"/>
     </visual>
     <collision>
         <origin rpy="{r} {p} {yaw}" xyz="{x} {y} {z}"/>
@@ -79,12 +82,30 @@ def create_joint(joint_name, x, y, z, child_name, parent_name):
     return template
 
 
+def create_materials(num_materials):
+    urdf_materials = ''
+    for i in range(num_materials):
+        mat = [random.random() for _ in range(3)]
+
+        urdf_materials += f"""
+    <material name="mat_{i+1}">
+        <color rgba="{mat[0]} {mat[1]} {mat[2]} 1"/>
+    </material>
+"""
+
+    return urdf_materials
+
+
 def create_urdf(num_links, mesh_paths, partnet_dir):
+
     body = f"""
 <?xml version='1.0' encoding='utf-8'?>
 <robot name="partnet_{uuid.uuid4().hex}">
     <link name="base"><inertial><mass value="1.0" /><inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" /></inertial></link>
 """
+
+    # num_colors = random.randint(1, num_links)
+    body += create_materials(num_links)
 
     partnet_meshes_dir = os.path.join(partnet_dir, 'meshes')
     os.mkdir(partnet_meshes_dir)
@@ -96,17 +117,18 @@ def create_urdf(num_links, mesh_paths, partnet_dir):
         shutil.copyfile(mesh_path, dest)
 
         mesh = trimesh.load(mesh_path)
-        body += create_link(mesh, f'link_{i}', 0, 0,
-                            0, mesh_path, r=0, p=0, yaw=0, mass=0.75)
+        body += create_link(mesh, f'link_{i}', 0, 0, 0,
+                            mesh_path, num_links, r=0, p=0, yaw=0, mass=0.75)
 
         if i != num_links-1:
             # add joint
             body += create_joint(f'joint_{i}', 0,
                                  0, 1, f'link_{i}', f'link_{i+1}')
 
+    offset = num_links / 2.
     body += f"""
     <joint name="joint_{num_links-1}" type="fixed">
-        <origin rpy="1.570796326794897 0 -1.570796326794897" xyz="0 0 0" />
+        <origin rpy="1.570796326794897 0 -1.570796326794897" xyz="{offset} 0 0" />
         <child link="link_{num_links-1}" />
         <parent link="base" />
     </joint>
@@ -180,6 +202,20 @@ if __name__ == "__main__":
         action='store_true',
         default=False)
 
+    parser.add_argument(
+        '--min-links',
+        required=False,
+        type=int,
+        default=2,
+        help='TODO')
+
+    parser.add_argument(
+        '--max-links',
+        required=False,
+        type=int,
+        default=3,
+        help='TODO')
+
     args = parser.parse_args()
     check_inputs(args)
 
@@ -197,7 +233,8 @@ if __name__ == "__main__":
         partnet_dir = os.path.join(args.multilink, partnet_id)
         os.mkdir(partnet_dir)
 
-        urdf = create_urdf(random.choice([2]), variations, partnet_dir)
+        num_links = random.randint(args.min_links, args.max_links)
+        urdf = create_urdf(num_links, variations, partnet_dir)
         with open(os.path.join(partnet_dir, 'mobility_inertia.urdf'), 'w') as f:
             f.write(urdf)
 
@@ -223,4 +260,3 @@ if __name__ == "__main__":
 
         with open(os.path.join(args.multilink, 'meta.json'), 'w') as f:
             json.dump(metadata, f, indent=4)
-        exit(0)
