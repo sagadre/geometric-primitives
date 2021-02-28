@@ -10,6 +10,7 @@ import trimesh
 
 def create_primitive_variations(args):
     variations = []
+    z_scales = []
 
     for o in os.listdir(args.primitives):
         if 'obj' in o:
@@ -17,17 +18,20 @@ def create_primitive_variations(args):
 
                 x_scaling = random.random() * .1 + 0.05
                 y_scaling = random.random() * .1 + 0.05
+                z_scaling = 0.5 + 0.5 * random.random()
                 mesh = trimesh.load(os.path.join(args.primitives, o))
                 mesh.vertices[:, 0] *= x_scaling
                 mesh.vertices[:, 1] *= y_scaling
+                mesh.vertices[:, 2] *= z_scaling
 
                 name = o.split('.')[0]
                 obj_path = os.path.join(args.meshes, f'{name}_{i}.obj')
                 mesh.export(obj_path)
 
                 variations.append(obj_path)
+                z_scales.append(z_scaling)
 
-    return variations
+    return variations, z_scales
 
 
 def create_link(mesh, name, x, y, z, filename, num_colors, r=0, p=0, yaw=0, mass=0.75):
@@ -96,7 +100,7 @@ def create_materials(num_materials):
     return urdf_materials
 
 
-def create_urdf(num_links, mesh_paths, partnet_dir):
+def create_urdf(num_links, mesh_paths, z_scales, partnet_dir):
 
     body = f"""
 <?xml version='1.0' encoding='utf-8'?>
@@ -111,7 +115,9 @@ def create_urdf(num_links, mesh_paths, partnet_dir):
     os.mkdir(partnet_meshes_dir)
 
     for i in range(num_links):
-        mesh_path = random.choice(mesh_paths)
+        rand_index = random.randint(0, len(mesh_paths)-1)
+        mesh_path = mesh_paths[rand_index]
+        z_scale = z_scales[rand_index]
         dest = os.path.join(partnet_meshes_dir, os.path.basename(mesh_path))
 
         shutil.copyfile(mesh_path, dest)
@@ -123,13 +129,13 @@ def create_urdf(num_links, mesh_paths, partnet_dir):
         if i != num_links-1:
             # add joint
             body += create_joint(f'joint_{i}', 0,
-                                 0, 1, f'link_{i}', f'link_{i+1}')
+                                 0, z_scale, f'link_{i+1}', f'link_{i}')
 
     offset = num_links / 2.
     body += f"""
-    <joint name="joint_{num_links-1}" type="fixed">
+    <joint name="joint_base" type="fixed">
         <origin rpy="1.570796326794897 0 -1.570796326794897" xyz="{offset} 0 0" />
-        <child link="link_{num_links-1}" />
+        <child link="link_0" />
         <parent link="base" />
     </joint>
 </robot>"""
@@ -228,7 +234,7 @@ if __name__ == "__main__":
     if args.seed is not None:
         random.seed(args.seed)
 
-    variations = create_primitive_variations(args)
+    variations, z_scales = create_primitive_variations(args)
 
     partnet_ids = []
     for i in range(args.num_urdfs):
@@ -238,12 +244,12 @@ if __name__ == "__main__":
 
     metadata = {'train': [], 'val': [], 'test': []}
 
-    for partnet_id in partnet_ids:
+    for i, partnet_id in enumerate(partnet_ids):
         partnet_dir = os.path.join(args.multilink, partnet_id)
         os.mkdir(partnet_dir)
 
         num_links = random.randint(args.min_links, args.max_links)
-        urdf = create_urdf(num_links, variations, partnet_dir)
+        urdf = create_urdf(num_links, variations, z_scales, partnet_dir)
         with open(os.path.join(partnet_dir, 'mobility_inertia.urdf'), 'w') as f:
             f.write(urdf)
 
