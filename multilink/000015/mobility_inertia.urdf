@@ -1,0 +1,102 @@
+
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="partnet_c36a26717bc343c9b06ec51a97b898f5">
+    <link name="base"><inertial><mass value="1.0" /><inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" /></inertial></link>
+
+    <material name="mat_1">
+        <color rgba="0.29418576249047135 0.97905705061977 0.4938567797381841 1"/>
+    </material>
+
+    <material name="mat_2">
+        <color rgba="0.12068204296242824 0.4461310995676414 0.8737849514717124 1"/>
+    </material>
+
+    <material name="mat_3">
+        <color rgba="0.2045531127556387 0.1050529020968668 0.8560834011069749 1"/>
+    </material>
+
+    <link name="link_0">
+    <inertial>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <mass value="0.75"/>
+        <inertia ixx="0.0008234002646046769" ixy="1.6966040991008986e-11" ixz="-8.185479383037135e-21" iyy="0.0008760547069509026" iyz="0.0" izz="0.00013713278414756203"/>
+    </inertial>
+    <visual>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>
+        <mesh filename="./meshes/sphere_6.obj" scale="1 1 1"/>
+        </geometry>
+        <material name="mat_2"/>
+    </visual>
+    <collision>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>
+        <mesh filename="./meshes/sphere_6.obj" scale="1 1 1"/>
+        </geometry>
+    </collision>
+    </link>
+
+    <joint name="joint_0" type="revolute" >
+        <origin xyz="0 0 0.8283035382061159" />
+        <axis xyz="0 1 0" />
+        <child link="link_1" />
+        <parent link="link_0" />
+        <limit lower="-1.57079632679" upper="1.57079632679" effort="10" velocity="3"/>
+    </joint>
+
+    <link name="link_1">
+    <inertial>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <mass value="0.75"/>
+        <inertia ixx="3.728672239940292e-05" ixy="-2.487073033142666e-12" ixz="3.0448211238348646e-12" iyy="3.588239065810926e-05" iyz="3.531082946889807e-12" izz="9.778396254830025e-06"/>
+    </inertial>
+    <visual>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>
+        <mesh filename="./meshes/diamond_2.obj" scale="1 1 1"/>
+        </geometry>
+        <material name="mat_1"/>
+    </visual>
+    <collision>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>
+        <mesh filename="./meshes/diamond_2.obj" scale="1 1 1"/>
+        </geometry>
+    </collision>
+    </link>
+
+    <joint name="joint_1" type="revolute" >
+        <origin xyz="0 0 0.5491194901287326" />
+        <axis xyz="0 1 0" />
+        <child link="link_2" />
+        <parent link="link_1" />
+        <limit lower="-1.57079632679" upper="1.57079632679" effort="10" velocity="3"/>
+    </joint>
+
+    <link name="link_2">
+    <inertial>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <mass value="0.75"/>
+        <inertia ixx="0.0002022867860360006" ixy="1.7221613858871657e-09" ixz="4.986304077740702e-07" iyy="0.0001830966310860268" iyz="-2.867667977283113e-07" izz="9.309328701461716e-05"/>
+    </inertial>
+    <visual>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>
+        <mesh filename="./meshes/pyramid_3.obj" scale="1 1 1"/>
+        </geometry>
+        <material name="mat_3"/>
+    </visual>
+    <collision>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>
+        <mesh filename="./meshes/pyramid_3.obj" scale="1 1 1"/>
+        </geometry>
+    </collision>
+    </link>
+
+    <joint name="joint_base" type="fixed">
+        <origin rpy="1.570796326794897 0 -1.570796326794897" xyz="1.5 0 0" />
+        <child link="link_0" />
+        <parent link="base" />
+    </joint>
+</robot>

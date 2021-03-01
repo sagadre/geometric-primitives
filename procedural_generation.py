@@ -16,9 +16,9 @@ def create_primitive_variations(args):
         if 'obj' in o:
             for i in range(args.num_raw_meshes):
 
-                x_scaling = random.random() * .1 + 0.05
-                y_scaling = random.random() * .1 + 0.05
-                z_scaling = 0.5 + 0.5 * random.random()
+                x_scaling = .3
+                y_scaling = .3
+                z_scaling = .6
                 mesh = trimesh.load(os.path.join(args.primitives, o))
                 mesh.vertices[:, 0] *= x_scaling
                 mesh.vertices[:, 1] *= y_scaling
@@ -186,7 +186,7 @@ if __name__ == "__main__":
         '--multilink',
         required=False,
         type=str,
-        default='./multilink',
+        default='./multilink_raw',
         help='TODO')
 
     parser.add_argument(
@@ -200,7 +200,7 @@ if __name__ == "__main__":
         '--num-urdfs',
         required=False,
         type=int,
-        default=40,
+        default=30,
         help='TODO')
 
     parser.add_argument(
@@ -212,7 +212,7 @@ if __name__ == "__main__":
         '--min-links',
         required=False,
         type=int,
-        default=2,
+        default=3,
         help='TODO')
 
     parser.add_argument(
