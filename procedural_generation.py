@@ -16,8 +16,8 @@ def create_primitive_variations(args):
         if 'obj' in o:
             for i in range(args.num_raw_meshes):
 
-                x_scaling = .3
-                y_scaling = .3
+                x_scaling = .25
+                y_scaling = .25
                 z_scaling = .6
                 mesh = trimesh.load(os.path.join(args.primitives, o))
                 mesh.vertices[:, 0] *= x_scaling
@@ -131,10 +131,9 @@ def create_urdf(num_links, mesh_paths, z_scales, partnet_dir):
             body += create_joint(f'joint_{i}', 0,
                                  0, z_scale, f'link_{i+1}', f'link_{i}')
 
-    offset = num_links / 2.
     body += f"""
     <joint name="joint_base" type="fixed">
-        <origin rpy="1.570796326794897 0 -1.570796326794897" xyz="{offset} 0 0" />
+        <origin rpy="1.570796326794897 0 -1.570796326794897" xyz="0.85 0 0" />
         <child link="link_0" />
         <parent link="base" />
     </joint>
