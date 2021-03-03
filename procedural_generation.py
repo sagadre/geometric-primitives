@@ -79,7 +79,7 @@ def create_joint(joint_name, x, y, z, child_name, parent_name):
         <axis xyz="0 1 0" />
         <child link="{child_name}" />
         <parent link="{parent_name}" />
-        <limit lower="0" upper="1.57079632679" effort="10" velocity="3"/>
+        <limit lower="-2.61799" upper="2.61799" effort="10" velocity="3"/>
     </joint>
 """
 
