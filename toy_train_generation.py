@@ -16,9 +16,9 @@ def create_primitive_variations(args):
         if 'obj' in o:
             for i in range(args.num_raw_meshes):
 
-                x_scaling = .5
-                y_scaling = .5
-                z_scaling = .7
+                x_scaling = 1.0
+                y_scaling = 1.0
+                z_scaling = 1.0
                 mesh = trimesh.load(os.path.join(args.primitives, o))
                 mesh.vertices[:, 0] *= x_scaling
                 mesh.vertices[:, 1] *= y_scaling
@@ -72,7 +72,7 @@ def create_link(mesh, name, x, y, z, filename, num_colors, r=0, p=0, yaw=0, mass
     return template
 
 
-def create_joint(joint_name, x, y, z, child_name, parent_name, is_toy_train):
+def create_joint(joint_name, x, y, z, child_name, parent_name):
     template = f"""
     <joint name="{joint_name}" type="revolute" >
         <origin xyz="{x} {y} {z}" />
@@ -80,16 +80,6 @@ def create_joint(joint_name, x, y, z, child_name, parent_name, is_toy_train):
         <child link="{child_name}" />
         <parent link="{parent_name}" />
         <limit lower="-2.61799" upper="2.61799" effort="10" velocity="3"/>
-    </joint>
-"""
-    if is_toy_train:
-        template = f"""
-    <joint name="{joint_name}" type="revolute" >
-        <origin xyz="{x} {y} {z}" />
-        <axis xyz="0 1 0" />
-        <child link="{child_name}" />
-        <parent link="{parent_name}" />
-        <limit lower="-0.872665" upper="0.872665" effort="10" velocity="3"/>
     </joint>
 """
 
@@ -110,7 +100,7 @@ def create_materials(num_materials):
     return urdf_materials
 
 
-def create_urdf(num_links, mesh_paths, z_scales, partnet_dir, is_toy_train=False):
+def create_urdf(num_links, mesh_paths, z_scales, partnet_dir):
 
     body = f"""
 <?xml version='1.0' encoding='utf-8'?>
@@ -125,9 +115,13 @@ def create_urdf(num_links, mesh_paths, z_scales, partnet_dir, is_toy_train=False
     os.mkdir(partnet_meshes_dir)
 
     for i in range(num_links):
+        sublist = []
+        for j in mesh_paths:
+            if '00' + str(i) in j:
+                sublist.append(j)
         rand_index = random.randint(0, len(mesh_paths)-1)
         mesh_path = mesh_paths[rand_index]
-        z_scale = z_scales[rand_index]
+        z_scale = 1.0
         dest = os.path.join(partnet_meshes_dir, os.path.basename(mesh_path))
 
         shutil.copyfile(mesh_path, dest)
@@ -139,7 +133,7 @@ def create_urdf(num_links, mesh_paths, z_scales, partnet_dir, is_toy_train=False
         if i != num_links-1:
             # add joint
             body += create_joint(f'joint_{i}', 0,
-                                 0, z_scale, f'link_{i+1}', f'link_{i}', is_toy_train)
+                                 0, z_scale, f'link_{i+1}', f'link_{i}')
 
     body += f"""
     <joint name="joint_base" type="fixed">
@@ -157,12 +151,12 @@ def check_inputs(args):
         raise ValueError(
             f'primitive dir path does not exist: {args.primitives}')
 
-    if os.path.exists(args.raw_dir):
-        shutil.rmtree(args.raw_dir)
-        os.mkdir(args.raw_dir)
+    if os.path.exists(args.toy_train):
+        shutil.rmtree(args.toy_train)
+        os.mkdir(args.toy_train)
 
-    if not os.path.exists(args.raw_dir):
-        os.mkdir(args.raw_dir)
+    if not os.path.exists(args.toy_train):
+        os.mkdir(args.toy_train)
 
     if os.path.exists(args.meshes):
         shutil.rmtree(args.meshes)
@@ -181,26 +175,22 @@ if __name__ == "__main__":
         '--primitives',
         required=False,
         type=str,
-        default='./primitives',
+        default='./toy_train_primitives',
         help='Specify dataset path that contains test and train folders')
 
     parser.add_argument(
         '--meshes',
         required=False,
         type=str,
-        default='./meshes',
+        default='./toy_meshes',
         help='TODO')
 
     parser.add_argument(
-        '--raw-dir',
+        '--toy-train',
         required=False,
         type=str,
-        default='./multilink_raw',
+        default='./toy_train_raw',
         help='TODO')
-    parser.add_argument(
-        '--toy-train',
-        action='store_true',
-        default=False)
 
     parser.add_argument(
         '--num-raw-meshes',
@@ -217,11 +207,6 @@ if __name__ == "__main__":
         help='TODO')
 
     parser.add_argument(
-        '--all-test',
-        action='store_true',
-        default=False)
-
-    parser.add_argument(
         '--min-links',
         required=False,
         type=int,
@@ -232,7 +217,7 @@ if __name__ == "__main__":
         '--max-links',
         required=False,
         type=int,
-        default=3,
+        default=4,
         help='TODO')
 
     parser.add_argument(
@@ -258,42 +243,26 @@ if __name__ == "__main__":
     metadata = {'train': [], 'val': [], 'test': []}
 
     for i, partnet_id in enumerate(partnet_ids):
-        partnet_dir = os.path.join(args.raw_dir, partnet_id)
+        partnet_dir = os.path.join(args.toy_train, partnet_id)
         os.mkdir(partnet_dir)
 
         num_links = random.randint(args.min_links, args.max_links)
-        urdf = create_urdf(num_links, variations, z_scales, partnet_dir, is_toy_train=args.toy_train)
+        urdf = create_urdf(num_links, variations, z_scales, partnet_dir)
         with open(os.path.join(partnet_dir, 'mobility_inertia.urdf'), 'w') as f:
             f.write(urdf)
 
         partnet_meta = {
             "user_id": "sy",
-            "model_cat": "Multilink",
-            "model_id": "3d1914946ded40bcb5c1c7d56b18e569",
+            "model_cat": "Toytrain",
+            "model_id": "dc66d37ba5024425b7ad7013e4ff27d4",
             "version": "1",
-            "anno_id": "1234",
+            "anno_id": "1235",
             "time_in_sec": "1"}
 
-        if args.toy_train:
-            partnet_meta = {
-                "user_id": "sy",
-                "model_cat": "toy_train",
-                "model_id": "dc66d37ba5024425b7ad7013e4ff27d4",
-                "version": "1",
-                "anno_id": "1235",
-                "time_in_sec": "1"}
-
-        if args.all_test:
-            metadata['test'].append(partnet_id)
-        else:
-            cutoff_val = int(args.num_urdfs * 0.8)
-            if i > cutoff_val:
-                metadata['val'].append(partnet_id)
-            else:
-                metadata['train'].append(partnet_id)
+        metadata['test'].append(partnet_id)
 
         with open(os.path.join(partnet_dir, 'meta.json'), 'w') as f:
             json.dump(partnet_meta, f, indent=4)
 
-        with open(os.path.join(args.raw_dir, 'meta.json'), 'w') as f:
+        with open(os.path.join(args.toy_train, 'meta.json'), 'w') as f:
             json.dump(metadata, f, indent=4)
