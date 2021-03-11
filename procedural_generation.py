@@ -34,7 +34,7 @@ def create_primitive_variations(args):
     return variations, z_scales
 
 
-def create_link(mesh, name, x, y, z, filename, num_colors, r=0, p=0, yaw=0, mass=0.75):
+def create_link(mesh, name, x, y, z, filename, mat_number, r=0, p=0, yaw=0, mass=0.75):
 
     inertia = mesh.moment_inertia
     xx = inertia[0, 0]
@@ -43,8 +43,6 @@ def create_link(mesh, name, x, y, z, filename, num_colors, r=0, p=0, yaw=0, mass
     yy = inertia[1, 1]
     yz = inertia[1, 2]
     zz = inertia[2, 2]
-
-    color_ref = random.randint(1, num_colors)
 
     template = f"""
     <link name="{name}">
@@ -58,7 +56,7 @@ def create_link(mesh, name, x, y, z, filename, num_colors, r=0, p=0, yaw=0, mass
         <geometry>
         <mesh filename="{filename}" scale="1 1 1"/>
         </geometry>
-        <material name="mat_{color_ref}"/>
+        <material name="mat_{mat_number+1}"/>
     </visual>
     <collision>
         <origin rpy="{r} {p} {yaw}" xyz="{x} {y} {z}"/>
@@ -134,7 +132,7 @@ def create_urdf(num_links, mesh_paths, z_scales, partnet_dir, is_toy_train=False
 
         mesh = trimesh.load(mesh_path)
         body += create_link(mesh, f'link_{i}', 0, 0, 0,
-                            mesh_path, num_links, r=0, p=0, yaw=0, mass=0.75)
+                            mesh_path, i, r=0, p=0, yaw=0, mass=0.75)
 
         if i != num_links-1:
             # add joint

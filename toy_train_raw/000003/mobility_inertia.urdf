@@ -1,37 +1,37 @@
 
 <?xml version='1.0' encoding='utf-8'?>
-<robot name="partnet_131985788ec14bf49aa89751ed7f1d1b">
+<robot name="partnet_62185bc268e14e9bbbb447ffaba6f943">
     <link name="base"><inertial><mass value="1.0" /><inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" /></inertial></link>
 
     <material name="mat_1">
-        <color rgba="0.9425508293656946 0.019953119915105066 0.14721708546216694 1"/>
+        <color rgba="0.44782230667185585 0.7499691116621582 0.7000561757029331 1"/>
     </material>
 
     <material name="mat_2">
-        <color rgba="0.7523379912019352 0.866878385779805 0.3935948281376961 1"/>
+        <color rgba="0.9564133281140541 0.4216656946510374 0.20883816344341843 1"/>
     </material>
 
     <material name="mat_3">
-        <color rgba="0.1520867867186143 0.21378467351775887 0.5487842357648776 1"/>
+        <color rgba="0.17178350667975328 0.6699864509242852 0.21692778569730742 1"/>
     </material>
 
     <link name="link_0">
     <inertial>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <mass value="0.75"/>
-        <inertia ixx="0.0005327014250829038" ixy="-8.910208422563106e-08" ixz="9.910415466524238e-09" iyy="0.0005015348207404789" iyz="1.228752069510437e-08" izz="0.0001362037121752979"/>
+        <inertia ixx="0.0006970302431369849" ixy="2.765067714180376e-07" ixz="4.3475500861886356e-07" iyy="0.0006177461486070379" iyz="-8.871647443520344e-05" izz="0.00024791834619423985"/>
     </inertial>
     <visual>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>
-        <mesh filename="./meshes/002_1.obj" scale="1 1 1"/>
+        <mesh filename="./meshes/000_9.obj" scale="1 1 1"/>
         </geometry>
-        <material name="mat_3"/>
+        <material name="mat_1"/>
     </visual>
     <collision>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>
-        <mesh filename="./meshes/002_1.obj" scale="1 1 1"/>
+        <mesh filename="./meshes/000_9.obj" scale="1 1 1"/>
         </geometry>
     </collision>
     </link>
@@ -48,19 +48,19 @@
     <inertial>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <mass value="0.75"/>
-        <inertia ixx="0.0004397613408125844" ixy="9.9295017092963e-08" ixz="-3.7141032753046395e-08" iyy="0.00044833212641787776" iyz="-1.206611973426756e-06" izz="7.890678398180441e-05"/>
+        <inertia ixx="0.0005327014250829038" ixy="-8.910208422563106e-08" ixz="9.910415466524238e-09" iyy="0.0005015348207404789" iyz="1.228752069510437e-08" izz="0.0001362037121752979"/>
     </inertial>
     <visual>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>
-        <mesh filename="./meshes/003_9.obj" scale="1 1 1"/>
+        <mesh filename="./meshes/002_1.obj" scale="1 1 1"/>
         </geometry>
-        <material name="mat_1"/>
+        <material name="mat_2"/>
     </visual>
     <collision>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>
-        <mesh filename="./meshes/003_9.obj" scale="1 1 1"/>
+        <mesh filename="./meshes/002_1.obj" scale="1 1 1"/>
         </geometry>
     </collision>
     </link>
@@ -77,19 +77,19 @@
     <inertial>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <mass value="0.75"/>
-        <inertia ixx="0.0005327014250829038" ixy="-8.910208422563106e-08" ixz="9.910415466524238e-09" iyy="0.0005015348207404789" iyz="1.228752069510437e-08" izz="0.0001362037121752979"/>
+        <inertia ixx="0.00028198614809330945" ixy="1.5291763048385704e-07" ixz="5.75013770144003e-08" iyy="0.0003182551393233221" iyz="-3.6939891121459006e-07" izz="5.4420876598236427e-05"/>
     </inertial>
     <visual>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>
-        <mesh filename="./meshes/002_4.obj" scale="1 1 1"/>
+        <mesh filename="./meshes/001_0.obj" scale="1 1 1"/>
         </geometry>
-        <material name="mat_2"/>
+        <material name="mat_3"/>
     </visual>
     <collision>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>
-        <mesh filename="./meshes/002_4.obj" scale="1 1 1"/>
+        <mesh filename="./meshes/001_0.obj" scale="1 1 1"/>
         </geometry>
     </collision>
     </link>

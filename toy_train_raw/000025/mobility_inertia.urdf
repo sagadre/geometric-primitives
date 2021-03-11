@@ -1,37 +1,37 @@
 
 <?xml version='1.0' encoding='utf-8'?>
-<robot name="partnet_273b94bb326641e7bb999ab685590369">
+<robot name="partnet_dc73248d996542f586df821fc45cf1ec">
     <link name="base"><inertial><mass value="1.0" /><inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" /></inertial></link>
 
     <material name="mat_1">
-        <color rgba="0.9433727519981814 0.38075235326820234 0.643968589386265 1"/>
+        <color rgba="0.02835660444235988 0.698902373549546 0.09366928757155368 1"/>
     </material>
 
     <material name="mat_2">
-        <color rgba="0.22976082375082862 0.24155589568990843 0.31314648790962196 1"/>
+        <color rgba="0.6090887653545929 0.8446456314817874 0.6170637719793276 1"/>
     </material>
 
     <material name="mat_3">
-        <color rgba="0.4404358853061403 0.42983845308165436 0.42806917936898803 1"/>
+        <color rgba="0.7258366413469457 0.7830340497583402 0.7158282032130587 1"/>
     </material>
 
     <link name="link_0">
     <inertial>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <mass value="0.75"/>
-        <inertia ixx="0.0005327014250829038" ixy="-8.910208422563106e-08" ixz="9.910415466524238e-09" iyy="0.0005015348207404789" iyz="1.228752069510437e-08" izz="0.0001362037121752979"/>
+        <inertia ixx="0.00028198614809330945" ixy="1.5291763048385704e-07" ixz="5.75013770144003e-08" iyy="0.0003182551393233221" iyz="-3.6939891121459006e-07" izz="5.4420876598236427e-05"/>
     </inertial>
     <visual>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>
-        <mesh filename="./meshes/002_0.obj" scale="1 1 1"/>
+        <mesh filename="./meshes/001_4.obj" scale="1 1 1"/>
         </geometry>
-        <material name="mat_3"/>
+        <material name="mat_1"/>
     </visual>
     <collision>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>
-        <mesh filename="./meshes/002_0.obj" scale="1 1 1"/>
+        <mesh filename="./meshes/001_4.obj" scale="1 1 1"/>
         </geometry>
     </collision>
     </link>
@@ -48,19 +48,19 @@
     <inertial>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <mass value="0.75"/>
-        <inertia ixx="0.0006970302431369849" ixy="2.765067714180376e-07" ixz="4.3475500861886356e-07" iyy="0.0006177461486070379" iyz="-8.871647443520344e-05" izz="0.00024791834619423985"/>
+        <inertia ixx="0.00028198614809330945" ixy="1.5291763048385704e-07" ixz="5.75013770144003e-08" iyy="0.0003182551393233221" iyz="-3.6939891121459006e-07" izz="5.4420876598236427e-05"/>
     </inertial>
     <visual>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>
-        <mesh filename="./meshes/000_5.obj" scale="1 1 1"/>
+        <mesh filename="./meshes/001_4.obj" scale="1 1 1"/>
         </geometry>
         <material name="mat_2"/>
     </visual>
     <collision>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>
-        <mesh filename="./meshes/000_5.obj" scale="1 1 1"/>
+        <mesh filename="./meshes/001_4.obj" scale="1 1 1"/>
         </geometry>
     </collision>
     </link>
@@ -77,19 +77,19 @@
     <inertial>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <mass value="0.75"/>
-        <inertia ixx="0.00028198614809330945" ixy="1.5291763048385704e-07" ixz="5.75013770144003e-08" iyy="0.0003182551393233221" iyz="-3.6939891121459006e-07" izz="5.4420876598236427e-05"/>
+        <inertia ixx="0.0005327014250829038" ixy="-8.910208422563106e-08" ixz="9.910415466524238e-09" iyy="0.0005015348207404789" iyz="1.228752069510437e-08" izz="0.0001362037121752979"/>
     </inertial>
     <visual>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>
-        <mesh filename="./meshes/001_7.obj" scale="1 1 1"/>
+        <mesh filename="./meshes/002_4.obj" scale="1 1 1"/>
         </geometry>
         <material name="mat_3"/>
     </visual>
     <collision>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>
-        <mesh filename="./meshes/001_7.obj" scale="1 1 1"/>
+        <mesh filename="./meshes/002_4.obj" scale="1 1 1"/>
         </geometry>
     </collision>
     </link>
